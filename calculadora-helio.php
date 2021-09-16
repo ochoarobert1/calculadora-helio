@@ -39,12 +39,31 @@ class Calculadora
     // =========================================================================
     public function __construct()
     {
+        // ADMIN HOOKS AND ACTIONS =============================================
         add_action('add_meta_boxes', array($this, 'addMetaBox'));
         add_action('save_post', array($this, 'saveMetaBox'));
         add_filter('manage_medidas_posts_columns', array($this, 'custom_filter_posts_columns'));
         add_action('manage_medidas_posts_custom_column', array($this, 'custom_medidas_column'), 10, 2);
         add_filter('manage_edit-medidas_sortable_columns', array($this, 'custom_medidas_sortable_columns'));
         add_action('pre_get_posts', array($this, 'custom_posts_orderby' ));
+
+        // FRONTEND HOOKS AND ACTIONS ==========================================
+        add_action('wp_enqueue_scripts', array($this, 'frontend_scripts'));
+    }
+
+    // =========================================================================
+    // ADD FRONTEND CUSTOM STYLES AND SCRIPTS
+    // =========================================================================
+    public function frontend_scripts()
+    {
+        /*- MAIN FUNCTIONS -*/
+        wp_register_script('calculadora-functions', plugins_url('/js/functions.js', __FILE__), array('jquery'), array(), true);
+        wp_enqueue_script('calculadora-functions');
+ 
+        /* LOCALIZE MAIN SHORTCODE SCRIPT */
+        wp_localize_script('calculadora-functions', 'custom_admin_url', array(
+             'ajax_url' => admin_url('admin-ajax.php')
+         ));
     }
 
     // =========================================================================
@@ -93,7 +112,7 @@ class Calculadora
             $cantidad = get_post_meta($post_id, 'cantidad_helio', true);
 
             if ($cantidad != '') {
-                echo number_format($cantidad, 2, ',', '.') . ' m3';
+                echo number_format($cantidad, 3, ',', '.') . ' m3';
             } else {
                 _e('Cantidad no especificada', 'calculadora-helio');
             }
