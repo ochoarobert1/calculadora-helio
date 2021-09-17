@@ -49,6 +49,38 @@ class Calculadora
 
         // FRONTEND HOOKS AND ACTIONS ==========================================
         add_action('wp_enqueue_scripts', array($this, 'frontend_scripts'));
+        add_action('init', array($this, 'calculadora_shortcode_init'));
+        add_action('wp_ajax_add_calculadora_items', array($this, 'calculadora_items'));
+        add_action('wp_ajax_nopriv_add_calculadora_items', array($this, 'calculadora_items'));
+    }
+
+    public function calculadora_items() {
+        ob_start();
+        ?>
+<div class="calculadora-globos-input-item-group cloned">
+    <div class="calculadora-input-item">
+        <input type="number" min="1" value="1" name="cantidad_globos[]" placeholder="<?php _e('Ingrese la cantidad', 'calculadora-helio'); ?>" />
+    </div>
+    <div class="calculadora-input-item">
+        <select name="modelo_globo[]" required>
+            <option value="" disabled selected><?php _e('Seleccione un tipo de globo', 'calculadora-helio'); ?></option>
+            <?php $arr_posts = new WP_Query(array('post_type' => 'medidas', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC')); ?>
+            <?php if ($arr_posts->have_posts()) : ?>
+            <?php while ($arr_posts->have_posts()) : $arr_posts->the_post(); ?>
+            <option value="<?php echo get_post_meta(get_the_ID(), 'cantidad_helio', true); ?>"><?php echo get_the_title(); ?></option>
+            <?php endwhile; ?>
+            <?php endif; ?>
+            <?php wp_reset_query(); ?>
+        </select>
+    </div>
+    <div class="calculadora-input-item-button">
+        <a class="deleteItems"><img src="<?php echo plugins_url('/svg/delete.svg', __FILE__); ?>" width="15" height="15" alt="Agregar" /></a>
+    </div>
+</div>
+<?php
+        $content = ob_get_clean();
+        wp_send_json_success($content);
+        wp_die();
     }
 
     // =========================================================================
@@ -56,14 +88,29 @@ class Calculadora
     // =========================================================================
     public function frontend_scripts()
     {
+        /* GET MEDIDAS */
+        $arr_medidas = array();
+        $arr_posts = new WP_Query(array('post_type' => 'medidas', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC'));
+        if ($arr_posts->have_posts()) :
+        while ($arr_posts->have_posts()) : $arr_posts->the_post();
+        $arr_medidas[] = get_the_title() . ',' . get_post_meta(get_the_ID(), 'cantidad_helio', true);
+        endwhile;
+        endif;
+        wp_reset_query();
+
         /*- MAIN FUNCTIONS -*/
         wp_register_script('calculadora-functions', plugins_url('/js/functions.js', __FILE__), array('jquery'), array(), true);
         wp_enqueue_script('calculadora-functions');
  
         /* LOCALIZE MAIN SHORTCODE SCRIPT */
         wp_localize_script('calculadora-functions', 'custom_admin_url', array(
-             'ajax_url' => admin_url('admin-ajax.php')
-         ));
+             'ajax_url' => admin_url('admin-ajax.php'),
+             'medidas_ajax' => json_encode($arr_medidas)
+        ));
+
+        /*- MAIN STYLE -*/
+        wp_register_style('calculadora-style', plugins_url('/css/calculadora-style.css', __FILE__), false, array(), 'all');
+        wp_enqueue_style('calculadora-style');
     }
 
     // =========================================================================
@@ -155,6 +202,66 @@ class Calculadora
 <label for="cantidad_helio"><?php _e('Cantidad de helio necesario: (Utilice sólo numeros)', 'calculadora-helio'); ?></label>
 <input type="text" name="cantidad_helio" id="cantidad_helio" class="postbox" style="margin: 5px 0;" value="<?php echo $value; ?>" />
 <?php
+    }
+
+    public function calculadora_shortcode_init()
+    {
+        add_shortcode('calculadora_shortcode', array($this, 'calculadora_shortcode'));
+    }
+
+    public function calculadora_shortcode($atts = [], $content = null)
+    {
+        $atts = array_change_key_case((array) $atts, CASE_LOWER);
+
+        // override default attributes with user attributes
+        $wporg_atts = shortcode_atts(
+            array(
+            'title' => 'WordPress.org',
+        ),
+            $atts,
+            $tag
+        );
+
+        ob_start(); ?>
+<form id="calculadoraForm" class="calculadora-globos-container">
+    <div id="calculadoraWrapper" class="calculadora-globos-input-content">
+        <div id="calculadoraItem1" class="calculadora-globos-input-item-group">
+            <div class="calculadora-input-item">
+                <label for="cantidad_globos"><?php _e('Cantidad de Globos', 'calculadora-helio'); ?></label>
+                <input type="number" value="1" min="1" name="cantidad_globos[]" placeholder="<?php _e('Ingrese la cantidad', 'calculadora-helio'); ?>" />
+            </div>
+            <div class="calculadora-input-item">
+                <label for="modelo_globo"><?php _e('Modelo de Globo', 'calculadora-helio'); ?></label>
+                <select name="modelo_globo[]" required>
+                    <option value="" disabled selected><?php _e('Seleccione un tipo de globo', 'calculadora-helio'); ?></option>
+                    <?php $arr_posts = new WP_Query(array('post_type' => 'medidas', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC')); ?>
+                    <?php if ($arr_posts->have_posts()) : ?>
+                    <?php while ($arr_posts->have_posts()) : $arr_posts->the_post(); ?>
+                    <option value="<?php echo get_post_meta(get_the_ID(), 'cantidad_helio', true); ?>"><?php echo get_the_title(); ?></option>
+                    <?php endwhile; ?>
+                    <?php endif; ?>
+                    <?php wp_reset_query(); ?>
+                </select>
+            </div>
+            <div class="calculadora-input-item-button">
+                <a id="addItems"><img src="<?php echo plugins_url('/svg/add.svg', __FILE__); ?>" width="15" height="15" alt="Agregar" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="calculadora-globos-results-content">
+        <button id="calculadoraBtn" class="calculadora-btn" type="submit" title="<?php _e('Haga click aqui para calcular la cantidad de Helio', 'calculadora-helio'); ?>"><?php _e('Calcular cantidad de Helio', 'calculadora-helio'); ?></button>
+        <div class="calculadora-globos-results">
+            <span><?php _e('Total:', 'calculadora-helio'); ?></span>
+            <span id="calculadoraNumber"><?php _e('0', 'calculadora-helio'); ?></span>
+            <span><?php _e('m3', 'calculadora-helio'); ?></span>
+        </div>
+        <small id="calculadoraError" class="calculadora-error no-display"><?php _e('Debe seleccionar el modelo del globo en las opciones', 'calculadora-helio'); ?></small>
+    </div>
+</form>
+<?php
+        $content = ob_get_clean();
+        // return output
+        return $content;
     }
 }
 

@@ -1,0 +1,135 @@
+// compress: false, javascriptEnabled: true
+/* --------------------------------------------------------------
+/* MAIN LESS MIXINS AND FUNCTIONS - LESSHAT
+-------------------------------------------------------------- */
+@import 'less/_lesshat.less';
+
+.calculadora-globos-container {
+    .display(flex);
+    .align-items(center);
+    .justify-content(space-between);
+    flex-wrap: wrap;
+    border: 1px solid #dedede;
+    box-sizing: border-box;
+    padding: 1rem;
+    border-radius: 10px;
+
+    & .calculadora-globos-input-item-group {
+        .display(flex);
+        .align-items(flex-start);
+        .justify-content(flex-start);
+        flex-wrap: wrap;
+        flex: 0 0 100%;
+        padding: 10px 0;
+        border-bottom: 1px solid #eeeeee;
+
+        &:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+    }
+
+    & .cloned {
+        .align-items(center);
+    }
+
+    & .calculadora-globos-input-content {
+        .display(flex);
+        .align-items(flex-start);
+        .justify-content(flex-start);
+        flex-wrap: wrap;
+        flex: 0 0 60%;
+
+        & .calculadora-input-item {
+            .display(flex);
+            .align-items(flex-start);
+            .justify-content(flex-start);
+            flex-wrap: wrap;
+            flex-flow: column;
+            flex: 0 0 45%;
+            box-sizing: border-box;
+            padding: 0 5px;
+
+            & label {
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+
+            & input {
+                background-color: transparent;
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #dedede;
+                border-radius: 5px;
+                box-shadow: none;
+            }
+
+            & select {
+                background-color: transparent;
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #dedede;
+                border-radius: 5px;
+            }
+        }
+
+        & .calculadora-input-item-button {
+            align-self: center;
+            border-left: 1px solid #c5c5c5;
+            padding: 1.5rem 1rem 1.5rem 1rem;
+
+            & a {
+                cursor: pointer;
+            }
+
+            & img {
+                height: auto;
+                max-width: 100%;
+                display: block;
+                border-radius: 3px;
+                width: 25px;
+            }
+        }
+    }
+
+    & .calculadora-globos-results-content {
+        .display(flex);
+        .align-items(flex-start);
+        .justify-content(flex-start);
+        flex-wrap: wrap;
+        flex-flow: column;
+        flex: 0 0 40%;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 0 15px 0 25px;
+
+        & .calculadora-btn {
+            background: black;
+            color: white;
+            width: 100%;
+            font-weight: 600;
+            font-size: 1.1rem;
+            .transition(all .3s ease-in-out);
+        }
+
+        & .calculadora-globos-results {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1.5rem;
+            margin-top: 10px;
+            background: #eeeeee;
+        }
+    }
+}
+
+.calculadora-error {
+    margin-top: 10px;
+    color: red;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+}
+
+.no-display {
+    display: none;
+}
