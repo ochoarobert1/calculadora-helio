@@ -59,7 +59,7 @@
             & input {
                 background-color: transparent;
                 width: 100%;
-                padding: 8px;
+                padding: 10px;
                 border: 1px solid #dedede;
                 border-radius: 5px;
                 box-shadow: none;
@@ -110,6 +110,8 @@
             width: 100%;
             font-weight: 600;
             font-size: 1.1rem;
+            padding: .5rem 1rem;
+            border: 0;
             .transition(all .3s ease-in-out);
         }
 
@@ -140,13 +142,17 @@
 }
 
 
-@media (max-width: 1170px) {
+@media (max-width: 1280px) {
     .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item:nth-child(1) {
         flex: 0 0 30%;
     }
 
     .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item {
         flex: 0 0 47%;
+    }
+
+    .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item label {
+        font-size: 0.8rem;
     }
 }
 
@@ -162,7 +168,7 @@
     }
 
     .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item label {
-        font-size: .9rem;
+        font-size: .7rem;
     }
 
     .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item:nth-child(1) {
