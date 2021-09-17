@@ -101,7 +101,7 @@ class Calculadora
         wp_reset_query();
 
         /*- MAIN FUNCTIONS -*/
-        wp_register_script('calculadora-functions', plugins_url('/js/functions.js', __FILE__), array('jquery'), array(), true);
+        wp_register_script('calculadora-functions', plugins_url('/js/functions.min.js', __FILE__), array('jquery'), array(), true);
         wp_enqueue_script('calculadora-functions');
  
         /* LOCALIZE MAIN SHORTCODE SCRIPT */
