@@ -24,6 +24,7 @@
   border-radius: 10px;
 }
 .calculadora-globos-container .calculadora-globos-input-item-group {
+  position: relative;
   display: -webkit-box;
   display: -moz-box;
   display: -webkit-flex;
@@ -180,4 +181,74 @@
 }
 .no-display {
   display: none;
+}
+.mobile-show {
+  display: none;
+}
+@media (max-width: 1170px) {
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item:nth-child(1) {
+    flex: 0 0 30%;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item {
+    flex: 0 0 47%;
+  }
+}
+@media (max-width: 991px) {
+  .calculadora-globos-container .calculadora-globos-results-content .calculadora-btn {
+    font-size: 1rem;
+    padding: 10px 0;
+  }
+  .calculadora-globos-container .calculadora-globos-results-content .calculadora-globos-results {
+    padding: 0.5rem;
+    font-size: 1.3rem;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item label {
+    font-size: 0.9rem;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item:nth-child(1) {
+    flex: 0 0 35%;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item input {
+    font-size: 0.9rem;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item select {
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 767px) {
+  .calculadora-globos-container {
+    flex-flow: column;
+  }
+  .mobile-show {
+    display: block;
+  }
+  .calculadora-globos-container .calculadora-globos-results-content {
+    flex: 0 0 100%;
+    padding: 25px 0 5px 0;
+    width: 100%;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item:nth-child(1) {
+    flex: 0 0 85%;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item {
+    flex: 0 0 85%;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item label {
+    font-size: 0.8rem;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item-button {
+    padding: 1rem 0rem 1rem 0.7rem;
+  }
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item-button {
+    padding: 1rem 0rem 1rem 0.7rem;
+    position: absolute;
+    right: 10px;
+    border: 0;
+    top: 42%;
+  }
+}
+@media (max-width: 414px) {
+  .calculadora-globos-container .calculadora-globos-input-content .calculadora-input-item label {
+    font-size: 0.7rem;
+  }
 }

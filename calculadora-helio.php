@@ -59,9 +59,11 @@ class Calculadora
         ?>
 <div class="calculadora-globos-input-item-group cloned">
     <div class="calculadora-input-item">
+        <label for="cantidad_globos" class="mobile-show"><?php _e('Cantidad de Globos', 'calculadora-helio'); ?></label>
         <input type="number" min="1" value="1" name="cantidad_globos[]" placeholder="<?php _e('Ingrese la cantidad', 'calculadora-helio'); ?>" />
     </div>
     <div class="calculadora-input-item">
+        <label for="modelo_globo" class="mobile-show"><?php _e('Modelo de Globo', 'calculadora-helio'); ?></label>
         <select name="modelo_globo[]" required>
             <option value="" disabled selected><?php _e('Seleccione un tipo de globo', 'calculadora-helio'); ?></option>
             <?php $arr_posts = new WP_Query(array('post_type' => 'medidas', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC')); ?>
